@@ -222,7 +222,11 @@ function App() {
 
   return (
     <Router>
-      <Navbar isAdmin={isAdmin} usdBalance={usdBalance} celoBalance={celoBalance} address={address}/>
+      <Navbar isAdmin={isAdmin} 
+              usdBalance={usdBalance} 
+              celoBalance={celoBalance} 
+              address={address} 
+              connectWallet={connectWallet}/>
       <Switch>
         <Route exact path="/">
           <Body submitForm={submitForm} />

@@ -22,7 +22,7 @@ const Navbar= props => {
           </li>
           <li className="lh-55px">
             {props.address == undefined ? 
-            <button class="btn login-btn ml-50" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn login-btn ml-50" type="button" onClick={props.connectWallet} id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Connect wallet
             </button>
             :<div class="dropdown">
