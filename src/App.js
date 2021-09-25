@@ -21,6 +21,7 @@ const monyaraContractAddress = "0xb68dF09062c055ff163645c428dcfc05b46812Cb";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 function App() {
+  const [celoBalance, setCeloBalance] = useState(0);
   const [usdBalance, setUsdBalance] = useState(0);
   const [contract, setcontract] = useState(null);
   const [address, setAddress] = useState(null);
@@ -75,13 +76,14 @@ function App() {
   const getUSDBalance = async () => {
     try {
       const balance = await kit.getTotalBalance(address);
+      const celoBalance = balance.CELO.shiftedBy(-ERC20_DECIMALS).toFixed(2);
       const USDBalance = balance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2);
-      console.log(USDBalance);
       const contract = new kit.web3.eth.Contract(
         monyaraAbi,
         monyaraContractAddress
       );
       setcontract(contract);
+      setCeloBalance(celoBalance)
       setUsdBalance(USDBalance);
     } catch (error) {
       console.log(error);
@@ -222,7 +224,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar isAdmin={isAdmin} usdBalance={usdBalance} />
+      <Navbar isAdmin={isAdmin} usdBalance={usdBalance} celoBalance={celoBalance} address={address}/>
       <Switch>
         <Route exact path="/">
           <Body submitForm={submitForm} />

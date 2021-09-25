@@ -20,7 +20,21 @@ const Navbar= props => {
           <li className="nav-item">
             {props.isAdmin && <Link className="nav-link" to="/admin">Admin</Link>}
           </li>
-          <li className="lh-55px"><a href="#" className="btn login-btn ml-50">Balance: {props.usdBalance}cUSD</a></li>
+          <li className="lh-55px">
+            {props.address == undefined ? 
+            <button class="btn login-btn ml-50" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Connect wallet
+            </button>
+            :<div class="dropdown">
+              <button class="btn login-btn ml-50 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                cUSD Balance: {props.usdBalance} $
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item">Address: 0x...{props.address.substr(-12)} </a>
+                <a class="dropdown-item">celo Balance: {props.celoBalance} $</a>
+              </div>
+            </div>}
+          </li>
         </ul>
       </div>
     </div>
