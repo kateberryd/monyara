@@ -203,3 +203,6 @@
         width: 80%;
     }
 }
+.dropdown:hover .dropdown-menu {
+    display: block;
+ }
