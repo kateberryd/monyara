@@ -1,4 +1,13 @@
 const MyLoanItem = (props) => {
+  var date = new Date(props.loan.timestamp * 1000);
+
+  var dateLoan = date.getDate()+
+            "/"+(date.getMonth()+1)+
+            "/"+date.getFullYear()+
+            " "+date.getHours()+
+            ":"+date.getMinutes()+
+            ":"+date.getSeconds();
+  console.log(date)
   const redeemLoan = () => {
     props.redeemLoan(props.loan);
   };
@@ -28,6 +37,7 @@ const MyLoanItem = (props) => {
         <div className="service-content">
           <h6 className=" bold">{props.loan.name}</h6>
           <p>Amount: {props.loan.amount}cUSD + 10% interest</p>
+          <p>Date loan: {dateLoan}</p>
           {object}
         </div>
       </div>

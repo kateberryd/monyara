@@ -13,7 +13,6 @@ import BigNumber from "bignumber.js";
 
 import monyaraAbi from "./contracts/monyara.abi.json";
 import IERC20 from "./contracts/IERC.abi.json";
-import { captureRejections } from "events";
 
 const ERC20_DECIMALS = 18;
 
@@ -53,7 +52,6 @@ function App() {
     if (window.celo) {
       try {
         await window.celo.enable();
-        // notificationOff()
         const web3 = new Web3(window.celo);
         let kit = newKitFromWeb3(web3);
 
