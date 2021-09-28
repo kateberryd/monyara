@@ -50,7 +50,7 @@ contract Loan {
     address internal bankAddress = 0xb7BF999D966F287Cd6A1541045999aD5f538D3c6;
 
     modifier isAdmin(uint256 _id) {
-        require(msg.sender == bankAddress, "Accessible only to the admin");
+        require(msg.sender == address(this), "Accessible only to the admin");
         _;
     }
 
@@ -75,7 +75,7 @@ contract Loan {
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
                 msg.sender,
-                bankAddress,
+                address(this),
                 loanRegistrationAmount
             ),
             "Error during Loan Registration"
@@ -135,7 +135,7 @@ contract Loan {
         LoanDetails storage singleLoan = loan[_index];
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
-                bankAddress,
+                address(this),
                 singleLoan.borrowerAddress,
                 singleLoan.amount
             ),
@@ -154,7 +154,7 @@ contract Loan {
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
                 msg.sender,
-                bankAddress,
+                address(this),
                 (singleLoan.amount + singleLoan.amount * 1 / 10)
             ),
             "Did not reedem loan"
@@ -163,7 +163,7 @@ contract Loan {
     }
 
     function isUserAdmin(address _address) public view returns (bool) {
-        if (_address == bankAddress) {
+        if (_address == address(this)) {
             return true;
         }
         return false;
