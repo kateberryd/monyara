@@ -20,6 +20,9 @@ const ERC20_DECIMALS = 18;
 const monyaraContractAddress = "0xb68dF09062c055ff163645c428dcfc05b46812Cb";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
+import NotificationSystem from "react-notification-system";
+
+
 function App() {
   const [usdBalance, setUsdBalance] = useState(0);
   const [contract, setcontract] = useState(null);
@@ -28,6 +31,8 @@ function App() {
   const [loans, setLoans] = useState([]);
   const [myLoans, setMyLoans] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const notificationSystem = React.createRef();
+
   // UseEffects
   useEffect(() => {
     connectWallet();
@@ -73,10 +78,10 @@ function App() {
   };
 
   const getUSDBalance = async () => {
+    const notification = notificationSystem.current;
     try {
       const balance = await kit.getTotalBalance(address);
       const USDBalance = balance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2);
-      console.log(USDBalance);
       const contract = new kit.web3.eth.Contract(
         monyaraAbi,
         monyaraContractAddress
@@ -85,6 +90,10 @@ function App() {
       setUsdBalance(USDBalance);
     } catch (error) {
       console.log(error);
+      notification.addNotification({
+        message: "Error Occurred",
+        level: "error",
+      });
     }
   };
 
@@ -98,6 +107,7 @@ function App() {
     _duration
   ) => {
     const cUSDContract = new kit.web3.eth.Contract(IERC20, cUSDContractAddress);
+    const notification = notificationSystem.current;
     try {
       const loanRegistrationAmount = new BigNumber(1)
         .shiftedBy(ERC20_DECIMALS)
@@ -121,10 +131,16 @@ function App() {
       getLoans();
     } catch (error) {
       console.log(error);
+      notification.addNotification({
+        message: "Checking If Admin...Please wait",
+        level: "info",
+      });
     }
   };
 
   const getLoans = async () => {
+    const notification = notificationSystem.current;
+
     try {
       const loanLength = await contract.methods.getLoanLength().call();
       const _loans = [];
@@ -148,6 +164,10 @@ function App() {
               timestamp: loan[10],
             });
           } catch (error) {
+            notification.addNotification({
+              message: "User is not admin",
+              level: "error",
+            });
             console.log("User is not Admin");
           }
         });
@@ -173,6 +193,7 @@ function App() {
   };
 
   const verifyLoan = async (loan) => {
+    const notification = notificationSystem.current;
     const cUSDContract = new kit.web3.eth.Contract(IERC20, cUSDContractAddress);
     const loanAmount = new BigNumber(loan.amount)
       .shiftedBy(ERC20_DECIMALS)
@@ -186,21 +207,31 @@ function App() {
         .send({ from: address });
       getLoans();
     } catch (error) {
+      notification.addNotification({
+        message: "Could not verify loan",
+        level: "error",
+      });
       console.log(error);
     }
   };
   const unverifyLoan = async (loan) => {
+    const notification = notificationSystem.current;
     try {
       await contract.methods
         .unVerifyApplicant(loan.index)
         .send({ from: address });
       getLoans();
     } catch (error) {
+      notification.addNotification({
+        message: "Could not unverify Loan",
+        level: "error",
+      });
       console.log(error);
     }
   };
 
   const redeemLoan = async (loan) => {
+    const notification = notificationSystem.current;
     try {
       const cUSDContract = new kit.web3.eth.Contract(
         IERC20,
@@ -217,6 +248,10 @@ function App() {
       getLoans();
     } catch (error) {
       console.log(error);
+      notification.addNotification({
+        message: "Could not redeem Loan",
+        level: "error",
+      });
     }
   };
 
@@ -244,6 +279,7 @@ function App() {
           )}
         </Route>
       </Switch>
+      <NotificationSystem ref={notificationSystem} />
     </Router>
   );
 }
