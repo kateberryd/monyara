@@ -219,7 +219,7 @@ contract Loan {
             IERC20Token(cUsdTokenAddress).transferFrom(
                 msg.sender,
                 bankAddress,
-                (singleLoan.amount.add(singleLoan.amount.multiply(1 / 10)))
+                (singleLoan.amount.add(singleLoan.amount.mul(1 / 10)))
             ),
             "Did not reedem loan"
         );
